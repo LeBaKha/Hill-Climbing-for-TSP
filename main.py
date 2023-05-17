@@ -5,6 +5,7 @@ import PyQt6.QtWidgets as QtWidgets
 from matplotlib.backend_bases import FigureCanvasBase
 from ui import Ui_MainWindow
 from algorithm import *
+import asyncio
 from asyncqt import QEventLoop, asyncSlot
 from PyQt6.QtCore import QThread, pyqtSignal, pyqtSlot, QObject, QRunnable, QThreadPool, QCoreApplication
 import qtinter
