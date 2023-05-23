@@ -88,6 +88,7 @@ def hillClimbing(num_cities):
     print("Giải pháp tốt nhất:", [city_names[city] for city in currentSolution])
     print("Quãng đường ngắn nhất:", currentRouteLength)
     return ""
+
 class HillClimbing():
     def __init__(self, num_cities):
         self.matrix = None
