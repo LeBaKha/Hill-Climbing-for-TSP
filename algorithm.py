@@ -61,7 +61,6 @@ def getBestNeighbour (tsp, neighbours):
 #Áp dụng thuật toán và in kết quả
 def hillClimbing(num_cities):
     tsp = create_distance_matrix(num_cities)
-    print()
     print("Ma trận khoảng cách:")
     for row in tsp:
         print(row)
