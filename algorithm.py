@@ -4,8 +4,6 @@ import networkx as nx
 import matplotlib.pyplot as plt
 
 # Tạo ma trận khoảng cách ngẫu nhiên dựa trên số lượng thành phố
-city_names = ["Hà Nội", "Đà Nẵng", "TP.HCM", "Huế", "Hải Phòng", "Cần Thơ", "Nha Trang", "Đà Lạt", "Vũng Tàu", "Phan Thiết"]
-
 def create_distance_matrix(num_cities):
     distance_matrix = []
     for i in range(num_cities):
@@ -37,6 +35,17 @@ def routeLength (tsp, solution):
         routeLength += tsp[solution[i - 1]][solution[i]] 
     return routeLength 
 
+# Tạo ra các giải pháp hàng xóm
+def getNeighbours(solution):
+    neighbours = []
+    for i in range(len(solution)):
+        for j in range(i + 1, len(solution)):
+            neighbour = solution.copy()
+            neighbour[i] = solution[j]
+            neighbour[j] = solution[i]
+            neighbours.append(neighbour)
+    return neighbours
+
 # Tạo ra giải pháp tốt nhất và đường đi tốt nhất
 def getBestNeighbour (tsp, neighbours): 
     bestRouteLength = routeLength(tsp, neighbours[0]) 
@@ -48,45 +57,14 @@ def getBestNeighbour (tsp, neighbours):
             bestNeighbour = neighbour 
     return bestNeighbour, bestRouteLength 
 
-# Tạo ra các giải pháp hàng xóm
-def getNeighbours(solution):
-    neighbours = []
-    for i in range(len(solution)):
-        for j in range(i + 1, len(solution)):
-            neighbour = solution.copy()
-            neighbour[i], neighbour[j] = neighbour[j], neighbour[i]
-            neighbours.append(neighbour)
-    return neighbours
 
-# Áp dụng thuật toán và in kết quả
+#Áp dụng thuật toán và in kết quả
 def hillClimbing(num_cities):
     tsp = create_distance_matrix(num_cities)
     print()
     print("Ma trận khoảng cách:")
     for row in tsp:
         print(row)
-    print()
-    
-    currentSolution = randomSolution(num_cities)
-    print("Giải pháp hiện tại là:", [city_names[city] for city in currentSolution])
-    currentRouteLength = routeLength(tsp, currentSolution)
-    print("Độ dài quãng đường hiện tại là:", currentRouteLength)
-    print()
-    neighbours = getNeighbours(currentSolution)
-    print("Các giải pháp hàng xóm được tạo ra:")
-    for neighbour in neighbours:
-        neighbour_route_length = routeLength(tsp, neighbour)
-        print("   ", [city_names[city] for city in neighbour], " - Độ dài quãng đường hàng xóm này:", neighbour_route_length)
-    print()
-    bestNeighbour, bestNeighbourRouteLength = getBestNeighbour(tsp, neighbours)
-    while bestNeighbourRouteLength < currentRouteLength:
-        currentSolution = bestNeighbour
-        currentRouteLength = bestNeighbourRouteLength
-        neighbours = getNeighbours(currentSolution)
-        bestNeighbour, bestNeighbourRouteLength = getBestNeighbour(tsp, neighbours)
-
-    print("Giải pháp tốt nhất:", [city_names[city] for city in currentSolution])
-    print("Quãng đường ngắn nhất:", currentRouteLength)
     return ""
 
 class HillClimbing():
@@ -108,13 +86,13 @@ class HillClimbing():
         
         # Hiển thị đồ thị
         plt.show()
-        
+       
     def solve(self):
         self.matrix = create_distance_matrix(self.num_cities)
         currentSolution = randomSolution(self.num_cities)
-        self.result = "Giải pháp hiện tại là: " + str([city for city in currentSolution]) + "\n"
+        self.result = "Giải pháp ngẫu nhiên đầu tiên là: " + str([city for city in currentSolution]) + "\n"
         currentRouteLength = routeLength(self.matrix, currentSolution)
-        self.result += "Độ dài quãng đường hiện tại là: " + str(currentRouteLength) + "\n"
+        self.result += "Độ dài quãng đường ngẫu nhiên đầu tiên là: " + str(currentRouteLength) + "\n"
         neighbours = getNeighbours(currentSolution)
         self.result += "Các giải pháp hàng xóm được tạo ra:\n"
         for neighbour in neighbours:
@@ -135,8 +113,9 @@ def main():
     num_cities = int(input("Số lượng thành phố cần đi qua: ")) 
 
     if num_cities >= 2 :
+        print(hillClimbing(num_cities))
         hill = HillClimbing(num_cities)
-        hill.solve()
+        hill.solve() 
         print(hill.result)
         hill.create_plot()
     else :
